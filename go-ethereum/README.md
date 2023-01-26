@@ -19,22 +19,40 @@
 
 ### Creating a peer in the private network by specifying the genesis block
 - Some rules for peers in a private network:
-  - Each peer should have its own directory/folder by using --datadir.
-  - Each running peer should have its own port number (by using --port) and remote process communication port number (by using --http.port).
-  - In case you want to have more than one terminals being associated with the same running peer, the running peer should have a unique inter-process communication pipe (by using --ipcpath)
+  - Each peer should have its own directory/folder by using `--datadir`.
+  - Each running peer should have its own port number (by using `--port`) and remote process communication port number (by using `--http.port`).
+  - In case you want to have more than one terminals being associated with the same running peer, the running peer should have a unique inter-process communication pipe (by using `--ipcpath`)
 - Create a new peer (not running automatically).
-  - Create a new directory called ethereum (other names for the new directory are also OK, but please keep the consistency for the rest steps in the tutorial). Put genesis.json file to the new directory. Now, the file genesis.json should be at ~/ethereum/genesis.json.
+  - Change directory to current directory `cd ./go-ethereum`
+  - Create a new directory called `ethereum` (other names for the new directory are also OK, but please keep the consistency for the rest steps in the tutorial). Put `genesis.json` file to the new directory. Now, the file `genesis.json` should be at /go-ethereum/ethereum/genesis.json.
   - Create the new peer by running the following command: 
-  ```shell
-    geth --datadir "./ethereum/peer1" init ./ethereum/genesis.json
-  ```
-  - A new directory peer1 should be created. You can also use other directory names if you want, but please keep the consistency in the following steps of the tutorial. In the directory peer1, there are two folders. Folder geth saves the configurations and keystore saves the wallets of accounts that the peer may have. Since we have not yet created any wallets, the keystore folder should be empty.
+     ```shell
+     geth --datadir "./ethereum/peer1" init ./ethereum/genesis.json
+     ```
+  - A new directory `peer1` should be created. You can also use other directory names if you want, but please keep the consistency in the following steps of the tutorial. In the directory `peer1`, there are two folders. Folder `geth` saves the configurations and `keystore` saves the wallets of accounts that the peer may have. Since we have not yet created any wallets, the keystore folder should be empty.
 - Run the peer
   - The peer that we have created is not running right now. To run the peer, please use the following command with the chaindId replaced by the chaindId in your genesis.json: 
-    ```shell
-        geth --datadir "./ethereum/peer1" --nodiscover --networkid 24601 --port 12341 --http --http.port 9001 --authrpc.port 8551 --http.corsdomain "*" --ipcpath "./ethereum/peer1/geth1.ipc" console
-    ```
-  - Some information starts to show on the screen. The information is self-explanatory, so you can briefly go through it. Please locate the line as follows: INFO [mm-dd|hh:mm:ss.msc] Started P2P networking               self="peer1-id@ip-address:port?discport=0" 
-  The highlighted part should be the day, month, hour, minutes, second, millisecond, the running ethereum node id, the ip of the running node, and the port number of the running node.
-  Remember the peer1-id@ip-address:port?discport=0, we will use it later. Note that the "peer1-id", "ip-address", and "port" may be with different values for different persons.
-  - The value after --datadir should be the directory that you have just created. The value of --networkid should be identical with the chainId in your genesis.json file. The --port parameter is for the communication purpose of other peers in the same private network. If you do not use --port, the default value of port will be 30303. We will create the second peer in the same private network later. Option --http is to enable the Remote Procedure Call for this running peer. In particular, --http.port specifies what the port number that the peer listens on to receive the remote process callings (default value will be 8545) and --http.corsdomain plays as a filter for the domain names or IP addresses that the remote procedure callings come from. The wild card "*" after --http.corsdomain simply means that the peer accepts remote procedure calling from any remote hosts (and thus, it is risky). The string parameter after --ipcpath is the location of the pipe for inter process communication purpose. In the example, the pipe file is at ~/ethereum/peer1/geth1.ipc. We can connect and control the same peer from another terminal by using command geth attach ~/ethereum/peer1/geth1.ipc in a new terminal/shall.
+     ```shell
+     geth --datadir "./ethereum/peer1" --nodiscover --networkid 24601 --port 12341 --http --http.port 9001 --authrpc.port 8551 --http.corsdomain "*" --ipcpath "./ethereum/peer1/geth1.ipc" console
+     ```
+  - Some information starts to show on the screen. The information is self-explanatory, so you can briefly go through it. Please locate the line as follows:
+     ```
+      INFO [mm-dd|hh:mm:ss.msc] Started P2P networking   self="**peer1-id@ip-address:port?discport=0**"
+     ```
+  - The bolden part should be the day, month, hour, minutes, second, millisecond, the running ethereum node id, the ip of the running node, and the port number of the running node. Remember the `peer1-id@ip-address:port?discport=0`, we will use it later. Note that the "peer1-id", "ip-address", and "port" may be with different values for different persons.
+  - The value after `--datadir` should be the directory that you have just created. The value of `--networkid` should be identical with the `chainId` in your `genesis.json` file. The `--port` parameter is for the communication purpose of other peers in the same private network. If you do not use `--port`, the default value of port will be `30303`. We will create the second peer in the same private network later.
+  - Option `--http` is to enable the Remote Procedure Call for this running peer. In particular, `--http.port` specifies what the port number that the peer listens on to receive the remote process callings (default value will be 8545) and `--http.corsdomain` plays as a filter for the domain names or IP addresses that the remote procedure callings come from. The wild card `"*"` after `--http.corsdomain` simply means that the peer accepts remote procedure calling from any remote hosts (and thus, it is risky).
+  - The string parameter after `--ipcpath` is the location of the pipe for inter process communication purpose. In the example, the pipe file is at `./ethereum/peer1/geth1.ipc`. We can connect and control the same peer from another terminal by this command in a new terminal/shall.
+     ```shell
+     geth attach ./ethereum/peer1/geth1.ipc
+     ``` 
+  - After executing the command, we should see the following output:
+     ```
+     Welcome to the Geth JavaScript console!
+
+     instance: Geth/v1.9.25-stable-e7872729/linux-amd64/go1.15.6
+     at block: 0 (Wed Dec 31 1969 16:00:00 GMT-0800 (PST))
+     datadir: /home/david/ethereum/peer1
+     modules: admin:1.0 debug:1.0 eth:1.0 ethash:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
+     ```
+  - We see there are some modules have been automatically loaded in the console, i.e., `admin`, `debug`, `eth`, `ethash`, `miner`, `net`, `personal`, `rpc`, `txpool`, and `web3`. In the given console, we can run some functions provided by these modules. For example, we can run `admin.nodeInfo` to see the information about the node. Since we have no other peers running in the same private network, there would be no other peers listed after running command `admin.peers` in the console.
