@@ -4,7 +4,7 @@
 
 > This repo contains several tutorials that gives hands-on instructions for Blockchain beginner to understand software engineering on blockchain. For more details, read README.md under each directory.
 
-```
+```js
 .
 ├── README.md
 ├── go-ethereum // Tutorial 1 & 2
