@@ -255,7 +255,7 @@
 - In some cases, you may see a lot of warnings **WARN** in the console. It is a little bit annoying to have so many warnings. So, you can open another terminal and connect to the console of the running peers by using
 
    ```shell
-   geth attach ~/ethereum/peer1/geth1.ipc
+   geth attach ./ethereum/peer1/geth1.ipc
    ```
   
 ### Sending "money" from one account to another
